@@ -121,18 +121,14 @@ class realtimeCountdown extends Plugin
         $wrap = trim($wrap);
 
         // get date elements
-        $dateelements = explode(' ', $date);
-        $year = $dateelements[0];
-        $month = $dateelements[1];
-        $day = $dateelements[2];
-        $hour = $dateelements[3];
-        $minute = $dateelements[4];
-        $second = $dateelements[5];
+        $parameter = explode(' ', $date);
+
+        $parameter[] = '"' . $aftercount . '"';
 
         // get wrap text
         $wrap = explode('---', $wrap);
-        $beforecountdown = $wrap[0];
-        $aftercountdown = $wrap[1];
+        $parameter[] = '"' . $wrap[0] . '"';
+        $parameter[] = '"' . $wrap[1] . '"';
 
         // get language labels
         $language_labels = array(
@@ -147,9 +143,9 @@ class realtimeCountdown extends Plugin
             $this->_cms_lang->getLanguageValue('label_minute'),
             $this->_cms_lang->getLanguageValue('label_minutes'),
             $this->_cms_lang->getLanguageValue('label_second'),
-            $this->_cms_lang->getLanguageValue('label_seconds')
+            $this->_cms_lang->getLanguageValue('label_seconds'),
+            $this->_cms_lang->getLanguageValue('label_and'),
         );
-        $label_and = $this->_cms_lang->getLanguageValue('label_and');
 
         // get conf and set default
         $conf = array();
@@ -159,8 +155,16 @@ class realtimeCountdown extends Plugin
                 : $this->settings->get($elem);
         }
 
+        $parameter[] = $conf['hide_year'];
+        $parameter[] = $conf['hide_month'];
+        $parameter[] = $conf['hide_day'];
+        $parameter[] = $conf['hide_hour'];
+        $parameter[] = $conf['hide_minute'];
+        $parameter[] = $conf['hide_second'];
+
         // generate id
         $id = rand();
+        $parameter[] = '"' . $id . '"';
 
         // javascript for realtime countdown
         $syntax->insert_in_head('
@@ -171,27 +175,8 @@ class realtimeCountdown extends Plugin
         $syntax->insert_in_head('
             <script language="JavaScript">
                 window.onload = function() {
-                    initLanguage("'
-                        . implode(' ',$language_labels) . ' ' . $label_and
-                    . '");
-                    initCountdown(
-                        ' . $year . ',
-                        ' . $month . ',
-                        ' . $day . ',
-                        ' . $hour . ',
-                        ' . $minute . ',
-                        ' . $second . ',
-                        "' . $aftercount . '",
-                        "' . $beforecountdown . '",
-                        "' . $aftercountdown . '",
-                        ' . $conf['hide_year'] . ',
-                        ' . $conf['hide_month'] . ',
-                        ' . $conf['hide_day'] . ',
-                        ' . $conf['hide_hour'] . ',
-                        ' . $conf['hide_minute'] . ',
-                        ' . $conf['hide_second'] . ',
-                        "' . $id . '"
-                    );
+                    initLanguage("' . implode(' ',$language_labels) . '");
+                    initCountdown(' . implode(', ', $parameter) . ');
                 }
             </script>
         ');
