@@ -1,0 +1,13 @@
+label_year = year
+label_years = years
+label_month = month
+label_months = months
+label_day = day
+label_days = days
+label_hour = hour
+label_hours = hours
+label_minute = minute
+label_minutes = minutes
+label_second = second
+label_seconds = seconds
+label_and = and

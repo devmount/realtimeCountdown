@@ -1,0 +1,8 @@
+placeholder		= Returns the realtime Countdown. Expects parameter date, the text wrapping the countdown and the text being displayed after the countdown finished.
+description		= Genereates a Countdown who counts in realtime. <br /><br /><span style='font-weight:bold'>Use:</span><br /><span style='font-family:monospace;margin:3px 3px; background-color:#eee;border:1px dotted #aaa;'>{realtimeCountdown|yyyy m d hh mm ss|wrap --- wrap|after}</span> Inserts the countdown.<br /><br /><span style='font-weight:bold'>Documentation:</span><br />A detailed documentation can be found on <span style="font-style:italic;">www.devmount.de </span> (link above).
+config_hide_year	= Hide years
+config_hide_month	= Hide months
+config_hide_day		= Hide days
+config_hide_hour	= Hide hours
+config_hide_minute	= Hide minutes
+config_hide_second	= Hide seconds

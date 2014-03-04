@@ -1,0 +1,8 @@
+placeholder			= Gibt den Echtzeit-Countdown zurück. Erwartet als 1. Parameter das Datum, als 2. Paramter den Text, der den Countdown umgibt und als 3. Parameter den Text, der angezeigt werden soll, sobald der Countdown beendet ist.
+description			= Generiert einen Countdown, der in Echtzeit zählt. <br /><br /><span style='font-weight:bold'>Nutzung:</span><br /><span style='font-family:monospace;margin:3px 3px; background-color:#eee;border:1px dotted #aaa;'>{realtimeCountdown|yyyy m d hh mm ss|wrap --- wrap|after}</span> Fügt den Countdown ein.<br /><br /><span style='font-weight:bold'>Dokumentation:</span><br />Eine ausführliche Dokumentation ist auf <span style="font-style:italic">www.devmount.de</span> zu finden (siehe obenstehender Link).
+config_hide_year	= Jahre ausblenden
+config_hide_month	= Monate ausblenden
+config_hide_day		= Tage ausblenden
+config_hide_hour	= Stunden ausblenden
+config_hide_minute	= Minuten ausblenden
+config_hide_second	= Sekunden ausblenden
