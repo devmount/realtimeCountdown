@@ -1,180 +1,439 @@
 <?php
 
 /**
- * Plugin:   realtimeCountdown
- * @author:  HPdesigner (hpdesigner[at]web[dot]de)
- * @version: v1.1.2013-10-17
- * @license: GPL
- * @see:     Delight yourself in the LORD and he will give you the desires of your heart.
- *           - The Bible
+ * moziloCMS Plugin: realtimeCountdown
+ *
+ * Generates a Countdown that counts in realtime.
+ *
+ * PHP version 5
+ *
+ * @category PHP
+ * @package  PHP_MoziloPlugins
+ * @author   HPdesigner <mail@devmount.de>
+ * @license  GPL v3
+ * @version  GIT: v1.1.2013-10-17
+ * @link     https://github.com/devmount/realtimeCountdown
+ * @link     http://devmount.de/Develop/Mozilo%20Plugins/realtimeCountdown.html
+ * @see      Delight yourself in the LORD
+ *           and he will give you the desires of your heart.
+ *            - The Bible
  *
  * Plugin created by DEVMOUNT
  * www.devmount.de
  *
-**/
+ */
 
-if(!defined('IS_CMS')) die();
+// only allow moziloCMS environment
+if (!defined('IS_CMS')) {
+    die();
+}
 
-class realtimeCountdown extends Plugin {
+/**
+ * realtimeCountdown Class
+ *
+ * @category PHP
+ * @package  PHP_MoziloPlugins
+ * @author   HPdesigner <mail@devmount.de>
+ * @license  GPL v3
+ * @link     https://github.com/devmount/realtimeCountdown
+ */
+class realtimeCountdown extends Plugin
+{
+    // language
+    private $_admin_lang;
+    private $_cms_lang;
 
-	public $admin_lang;
-	private $cms_lang;
+    // plugin information
+    const PLUGIN_AUTHOR  = 'HPdesigner';
+    const PLUGIN_DOCU
+        = 'http://devmount.de/Develop/Mozilo%20Plugins/realtimeCountdown.html';
+    const PLUGIN_TITLE   = 'realtimeCountdown';
+    const PLUGIN_VERSION = 'v1.1.2013-10-17';
+    const MOZILO_VERSION = '2.0';
+    private $_plugin_tags = array(
+        'tag1' => '{realtimeCountdown|<date>|<wrap>|<after>}',
+    );
 
-	function getContent($value) {
+    const LOGO_URL = 'http://media.devmount.de/logo_pluginconf.png';
 
-		global $CMS_CONF;
+    /**
+     * set configuration elements, their default values and their configuration
+     * parameters
+     *
+     * @var array $_confdefault
+     *      text     => default, type, maxlength, size, regex
+     *      textarea => default, type, cols, rows, regex
+     *      password => default, type, maxlength, size, regex, saveasmd5
+     *      check    => default, type
+     *      radio    => default, type, descriptions
+     *      select   => default, type, descriptions, multiselect
+     */
+    private $_confdefault = array(
+        'hide_year' => array(
+            'false',
+            'check',
+        ),
+        'hide_month' => array(
+            'false',
+            'check',
+        ),
+        'hide_day' => array(
+            'false',
+            'check',
+        ),
+        'hide_hour' => array(
+            'false',
+            'check',
+        ),
+        'hide_minute' => array(
+            'false',
+            'check',
+        ),
+        'hide_second' => array(
+            'false',
+            'check',
+        ),
+    );
 
-		$this->cms_lang = new Language(PLUGIN_DIR_REL.'realtimeCountdown/sprachen/cms_language_'.$CMS_CONF->get('cmslanguage').'.txt');
-		
-		// initialize return content
-		$content = '';
-		
-		// get params
-		$values = explode('|', $value);
-		$date = trim($values[0]); 		// date to count down
-		$wrap = trim($values[1]);		// text to put before and after countdown while counting
-		$aftercount = $values[2]; 		// text to display after countdown
-		
-		// get date elements
-		$dateelements = explode(' ', $date);
-		$year = $dateelements[0];
-		$month = $dateelements[1];
-		$day = $dateelements[2];
-		$hour = $dateelements[3];
-		$minute = $dateelements[4];
-		$second = $dateelements[5];
-		
-		// get wrap text
-		$wrap = explode('---', $wrap);
-		$beforecountdown = $wrap[0];
-		$aftercountdown = $wrap[1];
-		
-		// get language labels
-		$language_labels = array(
-			$this->cms_lang->getLanguageValue('label_year'),
-			$this->cms_lang->getLanguageValue('label_years'),
-			$this->cms_lang->getLanguageValue('label_month'),
-			$this->cms_lang->getLanguageValue('label_months'),
-			$this->cms_lang->getLanguageValue('label_day'),
-			$this->cms_lang->getLanguageValue('label_days'),
-			$this->cms_lang->getLanguageValue('label_hour'),
-			$this->cms_lang->getLanguageValue('label_hours'),
-			$this->cms_lang->getLanguageValue('label_minute'),
-			$this->cms_lang->getLanguageValue('label_minutes'),
-			$this->cms_lang->getLanguageValue('label_second'),
-			$this->cms_lang->getLanguageValue('label_seconds')
-		);
-		$label_and = $this->cms_lang->getLanguageValue('label_and');
-		
-		// get conf
-		$conf = array(
-			'hide_year' 	=> ($this->settings->get('hide_year') == 'true') ? 'true' : 'false',
-			'hide_month' 	=> ($this->settings->get('hide_month') == 'true') ? 'true' : 'false',
-			'hide_day' 		=> ($this->settings->get('hide_day') == 'true') ? 'true' : 'false',
-			'hide_hour' 	=> ($this->settings->get('hide_hour') == 'true') ? 'true' : 'false',
-			'hide_minute' 	=> ($this->settings->get('hide_minute') == 'true') ? 'true' : 'false',
-			'hide_second' 	=> ($this->settings->get('hide_second') == 'true') ? 'true' : 'false'
-		);
+    /**
+     * creates plugin content
+     *
+     * @param string $value Parameter divided by '|'
+     *
+     * @return string HTML output
+     */
+    function getContent($value)
+    {
+        global $CMS_CONF;
+        global $syntax;
 
-		// javascript for realtime countdown
-		$content .= '<script language="JavaScript" src="'.URL_BASE.PLUGIN_DIR_NAME.'/realtimeCountdown/countdown.js"></script>
-					<script language="JavaScript">
-						window.onload = function() {
-							initLanguage("'.implode(' ',$language_labels).' '.$label_and.'");
-							initCountdown(
-								' . $year . ',
-								' . $month . ',
-								' . $day . ',
-								' . $hour . ',
-								' . $minute . ',
-								' . $second . ',
-								"' . $aftercount . '",
-								"' . $beforecountdown . '",
-								"' . $aftercountdown . '",
-								' . $conf['hide_year'] . ',
-								' . $conf['hide_month'] . ',
-								' . $conf['hide_day'] . ',
-								' . $conf['hide_hour'] . ',
-								' . $conf['hide_minute'] . ',
-								' . $conf['hide_second'] . '
-							);
-						}</script>';
-		// html for container
-		$content .= '<div class="realtimeCountdown"><span id="showcountdown"></span></div>';
-		
-		// return countdown
-		return $content;
+        $this->_cms_lang = new Language(
+            $this->PLUGIN_SELF_DIR
+            . 'lang/cms_language_'
+            . $CMS_CONF->get('cmslanguage')
+            . '.txt'
+        );
 
-	} // function getContent
-	
-	
-	function getConfig() {
-		
-		$config = array();
+        // get params
+        list($date, $wrap, $aftercount)
+            = $this->makeUserParaArray($value, false, '|');
+        $date = trim($date);
+        $wrap = trim($wrap);
 
-		// hide year
-		$config['hide_year']  = array(
-			'type' => 'checkbox',
-			'description' => $this->admin_lang->getLanguageValue('config_hide_year')
-		);
-		// hide month
-		$config['hide_month']  = array(
-			'type' => 'checkbox',
-			'description' => $this->admin_lang->getLanguageValue('config_hide_month')
-		);
-		// hide day
-		$config['hide_day']  = array(
-			'type' => 'checkbox',
-			'description' => $this->admin_lang->getLanguageValue('config_hide_day')
-		);
-		// hide hour
-		$config['hide_hour']  = array(
-			'type' => 'checkbox',
-			'description' => $this->admin_lang->getLanguageValue('config_hide_hour')
-		);
-		// hide minute
-		$config['hide_minute']  = array(
-			'type' => 'checkbox',
-			'description' => $this->admin_lang->getLanguageValue('config_hide_minute')
-		);
-		// hide second
-		$config['hide_second']  = array(
-			'type' => 'checkbox',
-			'description' => $this->admin_lang->getLanguageValue('config_hide_second')
-		);
+        // get date elements
+        $dateelements = explode(' ', $date);
+        $year = $dateelements[0];
+        $month = $dateelements[1];
+        $day = $dateelements[2];
+        $hour = $dateelements[3];
+        $minute = $dateelements[4];
+        $second = $dateelements[5];
 
-		return $config;
+        // get wrap text
+        $wrap = explode('---', $wrap);
+        $beforecountdown = $wrap[0];
+        $aftercountdown = $wrap[1];
 
-	} // function getConfig    
-	
-	
-	function getInfo() {
-		global $ADMIN_CONF;
+        // get language labels
+        $language_labels = array(
+            $this->_cms_lang->getLanguageValue('label_year'),
+            $this->_cms_lang->getLanguageValue('label_years'),
+            $this->_cms_lang->getLanguageValue('label_month'),
+            $this->_cms_lang->getLanguageValue('label_months'),
+            $this->_cms_lang->getLanguageValue('label_day'),
+            $this->_cms_lang->getLanguageValue('label_days'),
+            $this->_cms_lang->getLanguageValue('label_hour'),
+            $this->_cms_lang->getLanguageValue('label_hours'),
+            $this->_cms_lang->getLanguageValue('label_minute'),
+            $this->_cms_lang->getLanguageValue('label_minutes'),
+            $this->_cms_lang->getLanguageValue('label_second'),
+            $this->_cms_lang->getLanguageValue('label_seconds')
+        );
+        $label_and = $this->_cms_lang->getLanguageValue('label_and');
 
-		$this->admin_lang = new Language(PLUGIN_DIR_REL.'realtimeCountdown/sprachen/admin_language_'.$ADMIN_CONF->get('language').'.txt');
-		
-		$info = array(
-			// Plugin-Name + Version
-			'<b>realtimeCountdown</b> v1.1.2013-10-17',
-			// moziloCMS-Version
-			'2.0',
-			// Kurzbeschreibung nur <span> und <br /> sind erlaubt
-			$this->admin_lang->getLanguageValue('description'), 
-			// Name des Autors
-			'HPdesigner',
-			// Download-URL
-			'http://www.devmount.de/Develop/Mozilo%20Plugins/realtimeCountdown.html',
-			// Platzhalter für die Selectbox in der Editieransicht 
-			// - ist das Array leer, erscheint das Plugin nicht in der Selectbox
-			array(
-				'{realtimeCountdown|2012 1 0 0 0 0|wrap --- wrap|after}' => $this->admin_lang->getLanguageValue('placeholder'),
-			)
-		);
-		// return plugin information
-		return $info;
-		
-	} // function getInfo
+        // get conf and set default
+        $conf = array();
+        foreach ($this->_confdefault as $elem => $default) {
+            $conf[$elem] = ($this->settings->get($elem) == '')
+                ? $default[0]
+                : $this->settings->get($elem);
+        }
 
-} // class DEMOPLUGIN
+        // generate id
+        $id = rand();
+
+        // javascript for realtime countdown
+        $syntax->insert_in_head('
+            <script language="JavaScript"
+                src="' . $this->PLUGIN_SELF_URL . 'countdown.js"
+            ></script>
+        ');
+        $syntax->insert_in_head('
+            <script language="JavaScript">
+                window.onload = function() {
+                    initLanguage("'
+                        . implode(' ',$language_labels) . ' ' . $label_and
+                    . '");
+                    initCountdown(
+                        ' . $year . ',
+                        ' . $month . ',
+                        ' . $day . ',
+                        ' . $hour . ',
+                        ' . $minute . ',
+                        ' . $second . ',
+                        "' . $aftercount . '",
+                        "' . $beforecountdown . '",
+                        "' . $aftercountdown . '",
+                        ' . $conf['hide_year'] . ',
+                        ' . $conf['hide_month'] . ',
+                        ' . $conf['hide_day'] . ',
+                        ' . $conf['hide_hour'] . ',
+                        ' . $conf['hide_minute'] . ',
+                        ' . $conf['hide_second'] . ',
+                        "' . $id . '"
+                    );
+                }
+            </script>
+        ');
+
+        // build for container
+        $content = '
+            <div class="realtimeCountdown">
+                <span id="' . $id . '"></span>
+            </div>
+        ';
+
+        // return countdown
+        return $content;
+    }
+
+    /**
+     * sets backend configuration elements and template
+     *
+     * @return Array configuration
+     */
+    function getConfig()
+    {
+        $config = array();
+
+        // read configuration values
+        foreach ($this->_confdefault as $key => $value) {
+            // handle each form type
+            switch ($value[1]) {
+            case 'text':
+                $config[$key] = $this->confText(
+                    $this->_admin_lang->getLanguageValue('config_' . $key),
+                    $value[2],
+                    $value[3],
+                    $value[4],
+                    $this->_admin_lang->getLanguageValue(
+                        'config_' . $key . '_error'
+                    )
+                );
+                break;
+
+            case 'textarea':
+                $config[$key] = $this->confTextarea(
+                    $this->_admin_lang->getLanguageValue('config_' . $key),
+                    $value[2],
+                    $value[3],
+                    $value[4],
+                    $this->_admin_lang->getLanguageValue(
+                        'config_' . $key . '_error'
+                    )
+                );
+                break;
+
+            case 'password':
+                $config[$key] = $this->confPassword(
+                    $this->_admin_lang->getLanguageValue('config_' . $key),
+                    $value[2],
+                    $value[3],
+                    $value[4],
+                    $this->_admin_lang->getLanguageValue(
+                        'config_' . $key . '_error'
+                    ),
+                    $value[5]
+                );
+                break;
+
+            case 'check':
+                $config[$key] = $this->confCheck(
+                    $this->_admin_lang->getLanguageValue('config_' . $key)
+                );
+                break;
+
+            case 'radio':
+                $descriptions = array();
+                foreach ($value[2] as $label) {
+                    $descriptions[$label] = $this->_admin_lang->getLanguageValue(
+                        'config_' . $key . '_' . $label
+                    );
+                }
+                $config[$key] = $this->confRadio(
+                    $this->_admin_lang->getLanguageValue('config_' . $key),
+                    $descriptions
+                );
+                break;
+
+            case 'select':
+                $descriptions = array();
+                foreach ($value[2] as $label) {
+                    $descriptions[$label] = $this->_admin_lang->getLanguageValue(
+                        'config_' . $key . '_' . $label
+                    );
+                }
+                $config[$key] = $this->confSelect(
+                    $this->_admin_lang->getLanguageValue('config_' . $key),
+                    $descriptions,
+                    $value[3]
+                );
+                break;
+
+            default:
+                break;
+            }
+        }
+
+        // read admin.css
+        $admin_css = '';
+        $lines = file('../plugins/' . self::PLUGIN_TITLE. '/admin.css');
+        foreach ($lines as $line_num => $line) {
+            $admin_css .= trim($line);
+        }
+
+        // add template CSS
+        $template = '<style>' . $admin_css . '</style>';
+
+        // build Template
+        $template .= '
+            <div class="realtimecountdown-admin-header">
+            <span>'
+                . $this->_admin_lang->getLanguageValue(
+                    'admin_header',
+                    self::PLUGIN_TITLE
+                )
+            . '</span>
+            <a href="' . self::PLUGIN_DOCU . '" target="_blank">
+            <img style="float:right;" src="' . self::LOGO_URL . '" />
+            </a>
+            </div>
+        </li>
+        <li class="mo-in-ul-li ui-widget-content realtimecountdown-admin-li">
+            <div class="realtimecountdown-admin-subheader">'
+            . $this->_admin_lang->getLanguageValue('admin_hide')
+            . '</div>
+            <div style="margin-bottom:5px;">
+                {hide_year_checkbox}
+                {hide_year_description}
+                <span class="realtimecountdown-admin-default">
+                    [' . $this->_confdefault['hide_year'][0] .']
+                </span>
+            </div>
+            <div style="margin-bottom:5px;">
+                {hide_month_checkbox}
+                {hide_month_description}
+                <span class="realtimecountdown-admin-default">
+                    [' . $this->_confdefault['hide_month'][0] .']
+                </span>
+            </div>
+            <div style="margin-bottom:5px;">
+                {hide_day_checkbox}
+                {hide_day_description}
+                <span class="realtimecountdown-admin-default">
+                    [' . $this->_confdefault['hide_day'][0] .']
+                </span>
+            </div>
+            <div style="margin-bottom:5px;">
+                {hide_hour_checkbox}
+                {hide_hour_description}
+                <span class="realtimecountdown-admin-default">
+                    [' . $this->_confdefault['hide_hour'][0] .']
+                </span>
+            </div>
+            <div style="margin-bottom:5px;">
+                {hide_minute_checkbox}
+                {hide_minute_description}
+                <span class="realtimecountdown-admin-default">
+                    [' . $this->_confdefault['hide_minute'][0] .']
+                </span>
+            </div>
+            <div style="margin-bottom:5px;">
+                {hide_second_checkbox}
+                {hide_second_description}
+                <span class="realtimecountdown-admin-default">
+                    [' . $this->_confdefault['hide_second'][0] .']
+                </span>
+        ';
+
+        $config['--template~~'] = $template;
+
+        return $config;
+    }
+
+
+    function getInfo()
+    {
+        global $ADMIN_CONF;
+
+        $this->_admin_lang = new Language(
+            $this->PLUGIN_SELF_DIR
+            . 'lang/admin_language_'
+            . $ADMIN_CONF->get('language')
+            . '.txt'
+        );
+
+        // build plugin tags
+        $tags = array();
+        foreach ($this->_plugin_tags as $key => $tag) {
+            $tags[$tag] = $this->_admin_lang->getLanguageValue('tag_' . $key);
+        }
+
+        $info = array(
+            '<b>' . self::PLUGIN_TITLE . '</b> ' . self::PLUGIN_VERSION,
+            self::MOZILO_VERSION,
+            $this->_admin_lang->getLanguageValue(
+                'description',
+                htmlspecialchars($this->_plugin_tags['tag1'])
+            ),
+            self::PLUGIN_AUTHOR,
+            self::PLUGIN_DOCU,
+            $tags
+        );
+
+        return $info;
+    }
+
+    /**
+     * creates configuration for checkboxes
+     *
+     * @param string $description Label
+     *
+     * @return Array  Configuration
+     */
+    protected function confCheck($description)
+    {
+        // required properties
+        return array(
+            'type' => 'checkbox',
+            'description' => $description,
+        );
+    }
+
+    /**
+     * throws styled error message
+     *
+     * @param string $text Content of error message
+     *
+     * @return string HTML content
+     */
+    protected function throwError($text)
+    {
+        return '<div class="' . self::PLUGIN_TITLE . 'Error">'
+            . '<div>' . $this->_cms_lang->getLanguageValue('error') . '</div>'
+            . '<span>' . $text. '</span>'
+            . '</div>';
+    }
+}
 
 ?>

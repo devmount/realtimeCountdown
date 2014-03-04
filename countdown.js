@@ -39,7 +39,10 @@ var str_hour = '';
 var str_minute = '';
 var str_second = '';
 
-function initCountdown(jahr, monat, tag, stunde, minute, sekunde, text, beforecd, aftercd, hideyear, hidemonth, hideday, hidehour, hideminute, hidesecond) {
+// get id
+var id = "0";
+
+function initCountdown(jahr, monat, tag, stunde, minute, sekunde, text, beforecd, aftercd, hideyear, hidemonth, hideday, hidehour, hideminute, hidesecond, num) {
 	zielDatum = new Date(jahr, monat-1, tag, stunde, minute, sekunde);
 	aftercount = text;
 	beforecountdown = beforecd;
@@ -50,6 +53,7 @@ function initCountdown(jahr, monat, tag, stunde, minute, sekunde, text, beforecd
 	hide_hour = hidehour;
 	hide_minute = hideminute;
 	hide_second = hidesecond;
+	id = num;
 	countdown();
 }
 
@@ -136,7 +140,7 @@ function countdown() {
 			(minuten != 1) ? str_minute = minuten + " " + label_minutes : str_minute = minuten + " " + label_minute;
 			arrstr.splice(0,0,str_minute);
 		};
-		if (!hide_second) { 
+		if (!hide_second) {
 			if(sekunden < 10) sekunden = "0" + sekunden;
 			(sekunden != 1) ? str_second = sekunden + " " + label_seconds : str_second = sekunden + " " + label_second;
 			arrstr.splice(0,0,str_second);
@@ -149,9 +153,9 @@ function countdown() {
 		};
 
 		// Anzeige aktualisieren
-		document.getElementById("showcountdown").innerHTML = beforecountdown + str + aftercountdown;
+		document.getElementById(id).innerHTML = beforecountdown + str + aftercountdown;
 		setTimeout('countdown()',200);
 	}
 	// after countdown
-	else document.getElementById("showcountdown").innerHTML = aftercount;
+	else document.getElementById(id).innerHTML = aftercount;
 }
