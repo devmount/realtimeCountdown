@@ -3,7 +3,7 @@ realtimeCountdown
 
 A Plugin for moziloCMS 2.0
 
-This plugin draft can be used for easier moziloCMS plugin development.
+Generates a countdown, that counts down in realtime.
 
 ## Installation
 #### With moziloCMS installer
@@ -17,7 +17,7 @@ Installing a plugin manually requires FTP Access.
 
 ## Syntax
 ```{realtimeCountdown|<date>|<wrap>|<after>}```
-Here comes the general description of the plugin tag.
+Inserts the countdown.
 
 1. Parameter ```<date>```: The specific date, to count down to, with format ```YYYY M D h m s``` (e.g. ```2099 12 31 12 0 0``` means the 31st december 2099, 12:00:00)
 2. Parameter ```<wrap>```: Wrapper text for the countdown. The placeholder for the countdown are 3 dashes: ```---``` (e.g. "The game starts in --- and lasts 2 hours.")
