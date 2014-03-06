@@ -123,9 +123,10 @@ class realtimeCountdown extends Plugin
         // get date elements
         $parameter = explode(' ', $date);
 
+        // add text for ended countdown
         $parameter[] = '"' . $aftercount . '"';
 
-        // get wrap text
+        // add wrap text
         $wrap = explode('---', $wrap);
         $parameter[] = '"' . $wrap[0] . '"';
         $parameter[] = '"' . $wrap[1] . '"';
@@ -155,6 +156,7 @@ class realtimeCountdown extends Plugin
                 : $this->settings->get($elem);
         }
 
+        // add conf for hiding elements
         $parameter[] = $conf['hide_year'];
         $parameter[] = $conf['hide_month'];
         $parameter[] = $conf['hide_day'];
@@ -162,7 +164,7 @@ class realtimeCountdown extends Plugin
         $parameter[] = $conf['hide_minute'];
         $parameter[] = $conf['hide_second'];
 
-        // generate id
+        // add id
         $id = rand();
         $parameter[] = '"' . $id . '"';
 
