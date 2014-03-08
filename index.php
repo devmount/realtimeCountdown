@@ -169,19 +169,19 @@ class realtimeCountdown extends Plugin
         $parameter[] = '"' . $id . '"';
 
         // javascript for realtime countdown
-        $syntax->insert_in_head('
-            <script language="JavaScript"
+        $syntax->insert_in_head(
+            '<script language="JavaScript"
                 src="' . $this->PLUGIN_SELF_URL . 'countdown.js"
-            ></script>
-        ');
-        $syntax->insert_in_head('
-            <script language="JavaScript">
+            ></script>'
+        );
+        $syntax->insert_in_head(
+            '<script language="JavaScript">
                 window.onload = function() {
-                    initLanguage("' . implode(' ',$language_labels) . '");
+                    initLanguage("' . implode(' ', $language_labels) . '");
                     initCountdown(' . implode(', ', $parameter) . ');
                 }
-            </script>
-        ');
+            </script>'
+        );
 
         // build for container
         $content = '
@@ -358,7 +358,11 @@ class realtimeCountdown extends Plugin
         return $config;
     }
 
-
+    /**
+     * sets backend plugin information
+     *
+     * @return Array information
+     */
     function getInfo()
     {
         global $ADMIN_CONF;
