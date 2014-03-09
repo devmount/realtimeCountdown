@@ -314,42 +314,42 @@ class realtimeCountdown extends Plugin
                 {hide_year_checkbox}
                 {hide_year_description}
                 <span class="realtimecountdown-admin-default">
-                    [' . $this->_confdefault['hide_year'][0] .']
+                    [' . $this->_confdefault['hide_year'][0] . ']
                 </span>
             </div>
             <div style="margin-bottom:5px;">
                 {hide_month_checkbox}
                 {hide_month_description}
                 <span class="realtimecountdown-admin-default">
-                    [' . $this->_confdefault['hide_month'][0] .']
+                    [' . $this->_confdefault['hide_month'][0] . ']
                 </span>
             </div>
             <div style="margin-bottom:5px;">
                 {hide_day_checkbox}
                 {hide_day_description}
                 <span class="realtimecountdown-admin-default">
-                    [' . $this->_confdefault['hide_day'][0] .']
+                    [' . $this->_confdefault['hide_day'][0] . ']
                 </span>
             </div>
             <div style="margin-bottom:5px;">
                 {hide_hour_checkbox}
                 {hide_hour_description}
                 <span class="realtimecountdown-admin-default">
-                    [' . $this->_confdefault['hide_hour'][0] .']
+                    [' . $this->_confdefault['hide_hour'][0] . ']
                 </span>
             </div>
             <div style="margin-bottom:5px;">
                 {hide_minute_checkbox}
                 {hide_minute_description}
                 <span class="realtimecountdown-admin-default">
-                    [' . $this->_confdefault['hide_minute'][0] .']
+                    [' . $this->_confdefault['hide_minute'][0] . ']
                 </span>
             </div>
             <div style="margin-bottom:5px;">
                 {hide_second_checkbox}
                 {hide_second_description}
                 <span class="realtimecountdown-admin-default">
-                    [' . $this->_confdefault['hide_second'][0] .']
+                    [' . $this->_confdefault['hide_second'][0] . ']
                 </span>
         ';
 
