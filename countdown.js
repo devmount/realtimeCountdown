@@ -43,7 +43,32 @@ var str_second = '';
 // get id
 var id = "0";
 
-function initCountdown(languagelabels, jahr, monat, tag, stunde, minute, sekunde, text, beforecd, aftercd, hideyear, hidemonth, hideday, hidehour, hideminute, hidesecond, hideleadingzero, num) {
+/**
+ * initializes needed values for countdown
+ *
+ * @param {string}  languagelabels  space separated language labels
+ * @param {integer} jahr            year
+ * @param {integer} monat           month
+ * @param {integer} tag             day
+ * @param {integer} stunde          hour
+ * @param {integer} minute          minute
+ * @param {integer} sekunde         second
+ * @param {string}  text            output for finished countdown
+ * @param {string}  beforecd        wrap
+ * @param {string}  aftercd         wrap
+ * @param {boolean} hideyear        hide year
+ * @param {boolean} hidemonth       hide month
+ * @param {boolean} hideday         hide day
+ * @param {boolean} hidehour        hide hour
+ * @param {boolean} hideminute      hide minute
+ * @param {boolean} hidesecond      hide second
+ * @param {boolean} hideleadingzero hide elements that are already zero
+ * @param {integer} num             id
+ *
+ * @return {void} call countdown()
+ */
+function initCountdown(languagelabels, jahr, monat, tag, stunde, minute, sekunde, text, beforecd, aftercd, hideyear, hidemonth, hideday, hidehour, hideminute, hidesecond, hideleadingzero, num)
+{
     languagelabels    = languagelabels.split(" ");
     label_year        = languagelabels[0];
     label_years       = languagelabels[1];
@@ -73,8 +98,13 @@ function initCountdown(languagelabels, jahr, monat, tag, stunde, minute, sekunde
     countdown();
 }
 
-function countdown() {
-
+/**
+ * function to evaluate countdown
+ *
+ * @return {strubg} countdown
+ */
+function countdown()
+{
     var startDatum = new Date(); // current date
 
     // evaluate countdown until target date
@@ -159,7 +189,7 @@ function countdown() {
             if (i == 1) { str = str + " " + label_and + " "; };
         };
 
-        // Anzeige aktualisieren
+        // update output
         document.getElementById(id).innerHTML = beforecountdown + str + aftercountdown;
         setTimeout('countdown()',200);
     } else {
