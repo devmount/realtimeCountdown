@@ -30,6 +30,7 @@ var hide_day;
 var hide_hour;
 var hide_minute;
 var hide_second;
+var hide_leading_zero;
 
 // init output
 var str_year = '';
@@ -42,22 +43,7 @@ var str_second = '';
 // get id
 var id = "0";
 
-function initCountdown(jahr, monat, tag, stunde, minute, sekunde, text, beforecd, aftercd, hideyear, hidemonth, hideday, hidehour, hideminute, hidesecond, num) {
-	zielDatum = new Date(jahr, monat-1, tag, stunde, minute, sekunde);
-	aftercount = text;
-	beforecountdown = beforecd;
-	aftercountdown = aftercd;
-	hide_year = hideyear;
-	hide_month = hidemonth;
-	hide_day = hideday;
-	hide_hour = hidehour;
-	hide_minute = hideminute;
-	hide_second = hidesecond;
-	id = num;
-	countdown();
-}
-
-function initLanguage(languagelabels) {
+function initCountdown(languagelabels, jahr, monat, tag, stunde, minute, sekunde, text, beforecd, aftercd, hideyear, hidemonth, hideday, hidehour, hideminute, hidesecond, hideleadingzero, num) {
 	languagelabels = languagelabels.split(" ");
 	label_year = languagelabels[0];
 	label_years = languagelabels[1];
@@ -72,6 +58,19 @@ function initLanguage(languagelabels) {
 	label_second = languagelabels[10];
 	label_seconds = languagelabels[11];
 	label_and = languagelabels[12];
+	zielDatum = new Date(jahr, monat-1, tag, stunde, minute, sekunde);
+	aftercount = text;
+	beforecountdown = beforecd;
+	aftercountdown = aftercd;
+	hide_year = hideyear;
+	hide_month = hidemonth;
+	hide_day = hideday;
+	hide_hour = hidehour;
+	hide_minute = hideminute;
+	hide_second = hidesecond;
+	hide_leading_zero = hideleadingzero;
+	id = num;
+	countdown();
 }
 
 function countdown() {
@@ -119,28 +118,34 @@ function countdown() {
 
 		var arrstr = new Array();
 		var str = '';
+		var show_year = !hide_year & !(hide_leading_zero & jahre == 0);
+		var show_month = !hide_month & !(hide_leading_zero & jahre == 0 & monate == 0);
+		var show_day = !hide_day & !(hide_leading_zero & jahre == 0 & monate == 0 & tage == 0);
+		var show_hour = !hide_hour & !(hide_leading_zero & jahre == 0 & monate == 0 & tage == 0 & stunden == 0);
+		var show_minute = !hide_minute & !(hide_leading_zero & jahre == 0 & monate == 0 & tage == 0 & stunden == 0 & minuten == 0);
+		var show_second = !hide_second;
 
-		if (!hide_year) {
+		if (show_year) {
 			(jahre != 1) ? str_year = jahre + " " + label_years : str_year = jahre + " " + label_year;
 			arrstr.splice(0,0,str_year);
 		};
-		if (!hide_month) {
+		if (show_month) {
 			(monate != 1) ? str_month = monate + " " + label_months : str_month = monate + " " + label_month;
 			arrstr.splice(0,0,str_month);
 		};
-		if (!hide_day) {
+		if (show_day) {
 			(tage != 1) ? str_day = tage + " " + label_days : str_day = tage + " " + label_day;
 			arrstr.splice(0,0,str_day);
 		};
-		if (!hide_hour) {
+		if (show_hour) {
 			(stunden != 1) ? str_hour = stunden + " " + label_hours : str_hour = stunden + " " + label_hour;
 			arrstr.splice(0,0,str_hour);
 		};
-		if (!hide_minute) {
+		if (show_minute) {
 			(minuten != 1) ? str_minute = minuten + " " + label_minutes : str_minute = minuten + " " + label_minute;
 			arrstr.splice(0,0,str_minute);
 		};
-		if (!hide_second) {
+		if (show_second) {
 			if(sekunden < 10) sekunden = "0" + sekunden;
 			(sekunden != 1) ? str_second = sekunden + " " + label_seconds : str_second = sekunden + " " + label_second;
 			arrstr.splice(0,0,str_second);

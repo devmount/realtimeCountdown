@@ -93,6 +93,10 @@ class realtimeCountdown extends Plugin
             'false',
             'check',
         ),
+        'hide_leading_zero' => array(
+            'true',
+            'check',
+        ),
     );
 
     /**
@@ -122,6 +126,9 @@ class realtimeCountdown extends Plugin
 
         // get date elements
         $parameter = explode(' ', $date);
+        // build id from date
+        $id = implode('', $parameter);
+
 
         // add text for ended countdown
         $parameter[] = '"' . $aftercount . '"';
@@ -163,9 +170,9 @@ class realtimeCountdown extends Plugin
         $parameter[] = $conf['hide_hour'];
         $parameter[] = $conf['hide_minute'];
         $parameter[] = $conf['hide_second'];
+        $parameter[] = $conf['hide_leading_zero'];
 
         // add id
-        $id = rand();
         $parameter[] = '"' . $id . '"';
 
         // javascript for realtime countdown
@@ -177,8 +184,10 @@ class realtimeCountdown extends Plugin
         $syntax->insert_in_head(
             '<script language="JavaScript">
                 window.onload = function() {
-                    initLanguage("' . implode(' ', $language_labels) . '");
-                    initCountdown(' . implode(', ', $parameter) . ');
+                    initCountdown("'
+                        . implode(' ', $language_labels) . '", '
+                        . implode(', ', $parameter)
+                    . ');
                 }
             </script>'
         );
@@ -350,6 +359,13 @@ class realtimeCountdown extends Plugin
                 {hide_second_description}
                 <span class="realtimecountdown-admin-default">
                     [' . $this->_confdefault['hide_second'][0] . ']
+                </span>
+            </div>
+            <div style="margin-bottom:5px;">
+                {hide_leading_zero_checkbox}
+                {hide_leading_zero_description}
+                <span class="realtimecountdown-admin-default">
+                    [' . $this->_confdefault['hide_leading_zero'][0] . ']
                 </span>
         ';
 
