@@ -11,7 +11,7 @@
  * @package  PHP_MoziloPlugins
  * @author   HPdesigner <mail@devmount.de>
  * @license  GPL v3
- * @version  GIT: v1.1.2013-10-17
+ * @version  GIT: v1.2.2014-03-14
  * @link     https://github.com/devmount/realtimeCountdown
  * @link     http://devmount.de/Develop/Mozilo%20Plugins/realtimeCountdown.html
  * @see      Delight yourself in the LORD
@@ -48,7 +48,7 @@ class realtimeCountdown extends Plugin
     const PLUGIN_DOCU
         = 'http://devmount.de/Develop/Mozilo%20Plugins/realtimeCountdown.html';
     const PLUGIN_TITLE   = 'realtimeCountdown';
-    const PLUGIN_VERSION = 'v1.1.2013-10-17';
+    const PLUGIN_VERSION = 'v1.2.2014-03-14';
     const MOZILO_VERSION = '2.0';
     private $_plugin_tags = array(
         'tag1' => '{realtimeCountdown|<date>|<wrap>|<after>}',
