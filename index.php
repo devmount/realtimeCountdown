@@ -46,7 +46,7 @@ class realtimeCountdown extends Plugin
     // plugin information
     const PLUGIN_AUTHOR  = 'HPdesigner';
     const PLUGIN_DOCU
-        = 'http://devmount.de/Develop/Mozilo%20Plugins/realtimeCountdown.html';
+        = 'http://devmount.de/Develop/moziloCMS/Plugins/realtimeCountdown.html';
     const PLUGIN_TITLE   = 'realtimeCountdown';
     const PLUGIN_VERSION = 'v1.2.2014-03-14';
     const MOZILO_VERSION = '2.0';
