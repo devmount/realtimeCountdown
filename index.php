@@ -12,7 +12,7 @@
  * @author   makes pages commentable <mail@devmount.de>
  * @license  GPL v3+
  * @version  GIT: v1.2.2014-03-14
- * @link     https://github.com/devmount/realtimeCountdown
+ * @link     https://github.com/devmount-mozilo/realtimeCountdown
  * @link     http://devmount.de/Develop/moziloCMS/Plugins/realtimeCountdown.html
  * @see      Delight yourself in the LORD
  *           and he will give you the desires of your heart.
@@ -35,7 +35,7 @@ if (!defined('IS_CMS')) {
  * @package  PHP_MoziloPlugins
  * @author   makes pages commentable <mail@devmount.de>
  * @license  GPL v3+
- * @link     https://github.com/devmount/realtimeCountdown
+ * @link     https://github.com/devmount-mozilo/realtimeCountdown
  */
 class realtimeCountdown extends Plugin
 {
