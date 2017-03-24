@@ -16,7 +16,9 @@ Installing a plugin manually requires FTP Access.
 - Go to the backend tab *Plugins* and activate the now listed new realtimeCountdown plugin
 
 ## Syntax
-```{realtimeCountdown|<date>|<wrap>|<after>}```
+```
+{realtimeCountdown|<date>|<wrap>|<after>}
+```
 Inserts the countdown.
 
 1. Parameter ```<date>```: The specific date, to count down to, with format ```YYYY M D h m s``` (e.g. ```2099 12 31 12 0 0``` means the 31st december 2099, 12:00:00)
@@ -28,4 +30,4 @@ This Plugin is distributed under *GNU General Public License, Version 3* (see LI
 
 ## Documentation
 A detailed documentation and demo can be found on DEVMOUNT's website:
-http://devmount.de/Develop/moziloCMS/Plugins/realtimeCountdown.html
+http://t.devmount.de/Develop/moziloCMS/Plugins/realtimeCountdown.html
